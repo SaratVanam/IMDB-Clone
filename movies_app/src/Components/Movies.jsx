@@ -5,12 +5,20 @@ import Pagination from "./Pagination";
 function Movies(){
     let [movies, setMovies] = useState([]);
     let [pageNo, setPageNo] = useState(1);
+    let [addToWatchList, setAddToWatchList]= useState([]);
+
+    let handleWatchList=(movieId)=>{
+        // console.log("inside handle Wathclist");
+        // console.log(movieId);
+        let newWatchList= [...addToWatchList,movieId]; // React will not be able to find out the changes and update on it's own, hence we need to pass a new reference each time so it gets rendered
+        setAddToWatchList(newWatchList);
+    }
+    console.log(addToWatchList);
 
     let handlePrev= ()=>{
         if(pageNo>1){
             setPageNo(pageNo-1);
         }
-
     }
 
     let handleNext= ()=>{
@@ -34,7 +42,7 @@ function Movies(){
             <div className="flex flex-wrap justify-around gap-8">
                 {movies.map((movieObj)=>{
                     // console.log(movieObj);
-                    return <MovieCard key={movieObj.id} name={movieObj.title} poster_path={movieObj.poster_path}/>
+                    return <MovieCard key={movieObj.id} id={movieObj.id} addToWatchList={addToWatchList} handleWatchList={handleWatchList} name={movieObj.title} poster_path={movieObj.poster_path}/>
                 })}
             </div>
             <Pagination pageNo={pageNo} handleNext={handleNext} handlePrev={handlePrev}/>
