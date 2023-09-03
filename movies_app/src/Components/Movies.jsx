@@ -11,10 +11,24 @@ function Movies(){
         // console.log("inside handle Wathclist");
         // console.log(movieId);
         let newWatchList= [...addToWatchList,movieId]; // React will not be able to find out the changes and update on it's own, hence we need to pass a new reference each time so it gets rendered
+        localStorage.setItem("moviesApp",JSON.stringify(newWatchList));
         setAddToWatchList(newWatchList);
     }
     console.log(addToWatchList);
 
+    let handleRemoveWatchList=(movieId)=>{
+        let filteredWatchList= addToWatchList.filter((id)=>{
+            return id!==movieId;
+        })
+        localStorage.setItem("moviesApp",JSON.stringify(filteredWatchList));
+        setAddToWatchList(filteredWatchList);
+    }
+
+    useEffect(()=>{
+        let moviesFromLocalStorage= localStorage.getItem("moviesApp");
+        setAddToWatchList(JSON.parse(moviesFromLocalStorage));
+    },[])
+    
     let handlePrev= ()=>{
         if(pageNo>1){
             setPageNo(pageNo-1);
@@ -42,7 +56,7 @@ function Movies(){
             <div className="flex flex-wrap justify-around gap-8">
                 {movies.map((movieObj)=>{
                     // console.log(movieObj);
-                    return <MovieCard key={movieObj.id} id={movieObj.id} addToWatchList={addToWatchList} handleWatchList={handleWatchList} name={movieObj.title} poster_path={movieObj.poster_path}/>
+                    return <MovieCard key={movieObj.id} id={movieObj.id} addToWatchList={addToWatchList} handleWatchList={handleWatchList} handleRemoveWatchList={handleRemoveWatchList} name={movieObj.title} poster_path={movieObj.poster_path}/>
                 })}
             </div>
             <Pagination pageNo={pageNo} handleNext={handleNext} handlePrev={handlePrev}/>
