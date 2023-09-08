@@ -1,6 +1,32 @@
 
 
-function Watchlist(){
+function Watchlist(props){
+
+    let {addToWatchList,handleRemoveWatchList} = props;
+
+    const genreIds = 
+        {
+            28: "Action",
+            12: "Adventure"  ,
+            16: "Animation"    ,
+            35: "Comedy",
+            80:"Crime"  ,
+            99: "Documentary",
+            18: "Drama",
+            10751:"Family"           ,
+            14:"Fantasy"           ,
+            36:"History"           ,
+            27:"Horror"            ,
+            10402:"Music"         ,
+            9648:"Mystery"           ,
+            10749:"Romance"           ,
+            878:"Sci-Fi"   ,
+            10770:"TV Movie"      ,
+            53:"Thriller"      ,
+            10752:"War"               ,
+            37:"Western"           
+        };
+    
 let movies=[
     
     {"adult":false,
@@ -78,16 +104,16 @@ let movies=[
                     <tr>
                         <th>Name</th>
                         <th className="flex items-center">
-                            <div><i class="fa-solid fa-caret-up p-2"></i></div>
+                            <div><i className="fa-solid fa-caret-up p-2"></i></div>
                             <div className="p-2">Ratings</div>
-                            <div><i class="fa-solid fa-caret-down p-2"></i></div></th>
+                            <div><i className="fa-solid fa-caret-down p-2"></i></div></th>
                         <th>Popularity</th>
                         <th>Genre</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody className="border-b-2">
-                    {movies.map((movieObj)=>{
+                    {addToWatchList.map((movieObj)=>{
                         return <tr>
                         <td className="flex items-center">
                             <img className="h-[8rem] w-[10rem]" src={`https://image.tmdb.org/t/p/original/${movieObj.poster_path}`} alt="" />
@@ -95,8 +121,8 @@ let movies=[
                         </td>
                         <td>{movieObj.vote_average}</td>
                         <td>{movieObj.popularity}</td>
-                        <td>Action</td>
-                        <td className="text-red-700">Delete</td>
+                        <td>{genreIds[movieObj.genre_ids[0]]}</td>
+                        <td onClick={()=>handleRemoveWatchList(movieObj)}  className=" hover:cursor-pointer text-red-700">Delete</td>
                     </tr>
                     })}
                 </tbody>
