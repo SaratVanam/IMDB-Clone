@@ -4,7 +4,7 @@ import Banner from './Components/Banner';
 import Movies from './Components/Movies';
 import NavBar from './Components/NavBar';
 import Watchlist from './Components/Watchlist';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 
 function App() {
 
@@ -22,8 +22,6 @@ function App() {
 
   let [addToWatchList, setAddToWatchList]= useState([]);
   let handleWatchList=(movieObj)=>{
-    // console.log("inside handle Wathclist");
-    // console.log(movieId);
     let newWatchList= [...addToWatchList,movieObj]; // React will not be able to find out the changes and update on it's own, hence we need to pass a new reference each time so it gets rendered
     localStorage.setItem("moviesApp",JSON.stringify(newWatchList));
     setAddToWatchList(newWatchList);
@@ -36,6 +34,14 @@ let handleRemoveWatchList=(movieObj)=>{
     localStorage.setItem("moviesApp",JSON.stringify(filteredWatchList));
     setAddToWatchList(filteredWatchList);
 }
+
+useEffect(()=>{
+  let moviesFromLocalStorage= localStorage.getItem("moviesApp");
+  if(!moviesFromLocalStorage){
+      return;
+  }
+  setAddToWatchList(JSON.parse(moviesFromLocalStorage));
+},[])
 
 
 
@@ -52,18 +58,12 @@ let handleRemoveWatchList=(movieObj)=>{
 
         </Route>
         <Route path='/watchlist' element={
-          <Watchlist addToWatchList={addToWatchList} handleRemoveWatchList={handleRemoveWatchList}/>
+          <Watchlist setAddToWatchList={setAddToWatchList} addToWatchList={addToWatchList} handleRemoveWatchList={handleRemoveWatchList}/>
         }>
 
         </Route>
       </Routes>
     </BrowserRouter>
-    // <>
-    // <NavBar/>
-    // <Banner/>
-    // <Movies/>
-    // <Watchlist/>
-    // </>
   );
 }
 
